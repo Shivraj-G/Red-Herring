@@ -4,12 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "red-herring"
-authors = [
-    {name = "shivraj", email = "shivarajgulabal@outlook.com"},
-]
+authors = [{name = "shivraj"}]
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = ["pydantic"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+include = [ "pipeline*","export*","training*","evals*"]
