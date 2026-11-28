@@ -7,7 +7,7 @@ name = "red-herring"
 authors = [{name = "shivraj"}]
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = ["pydantic"]
+dependencies = ["pydantic","tldextract"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]

@@ -21,7 +21,7 @@ def _registrable(v: str) -> str:
 
 Domain = Annotated[str, AfterValidator(_registrable)]
 Sha256 = Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
-Country = Annotated[str, Field(pattern=r"^[A-Z]{2}$")]
+Country = Annotated[str, Field(pattern=r"^([A-Z]{2}|GLOBAL)$")]
 
 
 class Strict(BaseModel):
@@ -50,14 +50,16 @@ class SiteCategory(str, Enum):
     OTHER = "other"
 
 
-class PageKind(str, Enum):  # CHECK against 12.1
+class PageKind(str, Enum):
     PRODUCT = "product"
     LISTING = "listing"
     CART = "cart"
     OTHER = "other"
+    CHECKOUT = "checkout"
+    LANDING = "landing"
 
 
-class Source(str, Enum):  # CHECK against 12.1
+class Source(str, Enum):
     CRAWL = "crawl"
     MATHUR = "mathur"
     YADA = "yada"
@@ -68,11 +70,13 @@ class SamplingSource(str, Enum):
     LEXICAL = "lexical"
     RANDOM = "random"
     UNCERTAIN = "uncertain"
+    SEED = "seed"
+    SYNTHETIC = "synthetic"
 
 
-class LabelStatus(str, Enum):  # CHECK against 12.1
-    UNLABELED = "unlabeled"
-    LABELED = "labeled"
+class LabelStatus(str, Enum):
+    SINGLE = "single"
+    DOUBLE = "double"
     ADJUDICATED = "adjudicated"
 
 
@@ -103,15 +107,15 @@ class SegmentRecord(Strict):
     source: Source
     sampling_source: SamplingSource
     dup_count: int = Field(ge=1)
-    label: Label | None = None
+    label: Label
     label_secondary: Label | None = None
     multi: bool = False
     needs_review: bool = False
-    label_status: LabelStatus = LabelStatus.UNLABELED
-    split: Split | None = None
+    label_status: LabelStatus
+    split: Split
     crawl_ts: datetime
     guideline_version: str
-    dataset_version: str | None = None
+    dataset_version: str
 
     @model_validator(mode="after")
     def _consistent(self):
@@ -126,7 +130,7 @@ class LabelEvent(Strict):
     event_id: str
     segment_id: str = Field(pattern=r"^seg_[0-9a-f]{12}$")
     annotator: Literal["me", "friend", "adjudicated"]
-    pass_: Literal[1, 2] = Field(alias="pass")  # `pass` is a Python keyword
+    pass_: Literal[1, 2] = Field(alias="pass")
     label: Label
     label_secondary: Label | None = None
     multi: bool = False
