@@ -4,8 +4,7 @@ from enum import Enum
 from typing import Annotated, Literal
 
 import tldextract
-from pydantic import (AfterValidator, BaseModel, ConfigDict, Field,
-                      model_validator)
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
 
 _tld = tldextract.TLDExtract(suffix_list_urls=())  # bundled list, no network
 
@@ -150,7 +149,7 @@ class LabelEvent(Strict):
 class FileEntry(Strict):
     name: str
     sha256: Sha256
-    rows: int | None = Field(default=None, ge=0)   # datasets
+    rows: int | None = Field(default=None, ge=0)  # datasets
     bytes: int | None = Field(default=None, ge=0)  # model files
 
 

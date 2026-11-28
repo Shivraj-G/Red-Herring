@@ -129,7 +129,9 @@ def changed(base, **updates):
 
 
 def test_text_key_matches_prd_example():
-    assert make_text_key("Hurry! Offer ends in 02:14:59") == "hurry offer ends in 00 00 00"
+    assert (
+        make_text_key("Hurry! Offer ends in 02:14:59") == "hurry offer ends in 00 00 00"
+    )
 
 
 def test_text_key_collapses_whitespace():
@@ -195,7 +197,9 @@ def test_segment_rejects_missing_required_field(missing):
 
 
 def test_segment_accepts_global_country():
-    assert SegmentRecord.model_validate(changed(SEGMENT, country="GLOBAL")).country == "GLOBAL"
+    assert (
+        SegmentRecord.model_validate(changed(SEGMENT, country="GLOBAL")).country == "GLOBAL"
+    )
 
 
 def test_segment_multi_with_secondary_is_valid():
@@ -240,7 +244,9 @@ def test_dataset_manifest_rejects_bad_version(version):
 
 
 def test_dataset_manifest_rejects_short_sha():
-    bad = changed(DATASET_MANIFEST, files=[{"name": "t.jsonl", "sha256": "abc", "rows": 1}])
+    bad = changed(
+        DATASET_MANIFEST, files=[{"name": "t.jsonl", "sha256": "abc", "rows": 1}]
+    )
     with pytest.raises(ValidationError):
         DatasetManifest.model_validate(bad)
 
@@ -279,9 +285,7 @@ def test_run_record_rejects_unknown_method():
 
 
 def test_run_record_rejects_metrics_other_than_val():
-    bad = changed(
-        RUN_RECORD, metrics={"test": {"macro_f1": 0.7, "per_class_f1": {}}}
-    )
+    bad = changed(RUN_RECORD, metrics={"test": {"macro_f1": 0.7, "per_class_f1": {}}})
     with pytest.raises(ValidationError):
         RunRecord.model_validate(bad)
 
